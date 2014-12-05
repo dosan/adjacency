@@ -19,48 +19,36 @@
 		<nav class="navbar navbar-default" role="navigation">
 			<div class="container-fluid">
 				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-						<?php if (Session::get('user_login_status') == 1): ?>
-							<ul class="nav navbar-nav navbar-right">
-								<li><a href="<?php echo URL ?>user"> <?php echo Session::get('user_name') ?></a></li>
-								<li><a href="<?php echo URL ?>user/logout">Log Out</a></li>
+					<ul class="nav navbar-nav">
+							<li><a href="/">Home</a></li>
+					</ul>
+					<ul class="nav navbar-nav navbar-right">
+							<?php if (Session::get('user_login_status') == 1): ?>
+								<li><a href="/user"> <?php echo Session::get('user_name') ?></a></li>
+								<li><a href="/user/logout">Log Out</a></li>
+							<?php else: ?>
+								<li><a href="/user">Login</a></li>
+								<li><a href="/user/register">Sign Up</a></li>
 								<li>
-									<div class="selectContainer">
-										<select class="form-control" id="SelectLang" onchange="changeLang()">
-											<?php foreach ($this->languages as $key => $value): ?>
-												<option value="<?php echo $key ?>" id="lang_<?php echo $key ?>"
-													<?php if (Session::get('user_lang') == $key): ?>
-														selected
-													<?php endif ?>
-													>
-													<?php echo $value['name'] ?>
-												</option>
-											<?php endforeach ?>
-										</select>
-									</div>
+								<div class="selectContainer">
+									<select class="form-control" id="SelectLang" onchange="changeLang()">
+										<?php foreach ($this->languages as $key => $index): ?>
+										<?php if (Session::get('user_lang')): ?>
+											<option value="<?php echo $key ?>" id="lang_<?php echo $key ?>"
+												<?= Session::get('user_lang') == $key ? 'selected' : ''?>
+												>
+												<?php echo $index['name'] ?>
+											</option>
+										<?php else: ?>
+										<option value="<?php echo $key ?>" id="lang_<?php echo $key ?>"	<?= $key == 'en' ? 'selected' : '' ?>>
+										<?php echo $index['name'] ?></option>
+										<?php endif ?>
+										<?php endforeach ?>
+									</select>
+								</div>
 								</li>
-							</ul>
-						<?php else: ?>
-								<ul class="nav navbar-nav navbar-right">
-									<li>
-									<div class="selectContainer">
-										<select class="form-control" id="SelectLang" onchange="changeLang()">
-											<?php foreach ($this->languages as $key => $index): ?>
-											<?php if (Session::get('user_lang')): ?>
-												<option value="<?php echo $key ?>" id="lang_<?php echo $key ?>"
-													<?= Session::get('user_lang') == $key ? 'selected' : ''?>
-													>
-													<?php echo $index['name'] ?>
-												</option>
-											<?php else: ?>
-											<option value="<?php echo $key ?>" id="lang_<?php echo $key ?>"	<?= $key == 'en' ? 'selected' : '' ?>>
-											<?php echo $index['name'] ?></option>
-											<?php endif ?>
-											<?php endforeach ?>
-										</select>
-									</div>
-									</li>
-								</ul>
-						<?php endif ?>
+							<?php endif ?>
+					</ul>
 				</div>
 			</div>
 		</nav>

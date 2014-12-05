@@ -71,7 +71,10 @@ class Post extends Controller{
 			echo '<div class="comments">';
 			echo '<div class="comment_hedaer">';
 			echo $value['user_name'].' at '.date('Y-m-d, H:m', $value['created_at']);
-			echo ' <a href="#" onclick="showFormAnswer('.$value['post_id'].'); return false;">Reply</a><br></div>';
+			if (Session::get('user_login_status') == 1) {
+				echo ' <a href="#" onclick="showFormAnswer('.$value['post_id'].'); return false;">Reply</a>';
+			}
+			echo '<br></div>';
 			echo '<div class="comment_content">'.$value['post_content'];
 			echo '<div class="hide" id="show_an_for_'.$value['post_id'].'">';
 			echo '<textarea id="answer_for_'.$value['post_id'].'" style="width: 100%; max-width: 100%;" rows="10"></textarea>';
