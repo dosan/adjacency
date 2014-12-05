@@ -280,3 +280,34 @@ function showUploadImage(){
 		$(showHiddenUploader).attr('class', 'hide');
 	}
 }
+/**
+ * Показывать или прятать данные о заказе
+ * 
+ */
+function showFormAnswer(id){
+	var objName = "#show_an_for_" + id;
+	if( $(objName).attr('class') != 'show' ) {
+		$(objName).attr('class', 'show');
+	} else {
+		$(objName).attr('class', 'hide');
+	}
+}
+function sendReply(id){
+	var answer = $('#answer_for_'+ id).val();
+	var postData = {answer: answer, post_id: id};
+
+	$.ajax({
+		type: 'POST',
+		async: false,
+		url: "/post/addcomment/",
+		data: postData,
+		dataType: 'json',
+		success: function(data){
+			if (data['success']) {
+				document.location.reload(true);
+			}else{
+				alert(data['message']);	
+			}
+		}
+	});
+}
