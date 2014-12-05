@@ -230,16 +230,16 @@ function validateRegisterForm() {
 	if (!regUserName.exec(user_password)) {
 		passErr.push(jsMessages['r_name_letters_num']);
 	}
+	if (user_password.length < 6 || user_password.length > 64){
+		passErr.push(jsMessages['r_password_length']);
+	}
 	if (user_password_rep == "" || user_password_rep == null) {
 		passRepErr.push(jsMessages['r_confirm_password']);
 	}
 	if (user_password !== user_password_rep) {
 		passRepErr.push(jsMessages['r_enter_same_pass']);
 	}
-	if (user_password.length < 6 || user_password.length > 64){
-		passErr.push(jsMessages['r_password_length']);
-	}
-	if (nameErr.length > 0 || emailErr.length > 0 || passErr.length > 0 || passRepErr > 0) {
+	if (nameErr.length > 0 || emailErr.length > 0 || passErr.length > 0 || passRepErr.length > 0) {
 		if (nameErr.length > 0) {
 			reportErrors('errUserName', nameErr, 'errmessage');
 		}else{
@@ -294,7 +294,8 @@ function showFormAnswer(id){
 }
 function sendReply(id){
 	var answer = $('#answer_for_'+ id).val();
-	var postData = {answer: answer, post_id: id};
+	var post_name = $('#post_name').val();
+	var postData = {answer: answer, post_id: id, post_name: post_name};
 
 	$.ajax({
 		type: 'POST',

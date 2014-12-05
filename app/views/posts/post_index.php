@@ -13,7 +13,7 @@
 				Author: <?php echo $this->post_index['user_name'] ?>
 			</span>
 			<?php if (Session::get('user_range') == 'admin'): ?>
-				<a class='btn btn-xs btn-danger' href='<?php echo URL?>news/deletenews/<?php echo $this->post_index['post_id'] ?>'>delete</a>
+				<a class='btn btn-xs btn-danger' href='<?php echo URL?>post/deletepost/<?php echo $this->post_index['post_id'] ?>'>delete</a>
 			<?php endif ?>
 		</div>
 	</div>
@@ -23,10 +23,9 @@
 		<?php endif ?>
 	</div>
 <?php if (Session::get('user_range') == 'user' or Session::get('user_range') == 'admin'): ?>
-
-			<h3>leave a comment</h3>
-				<label>Your comment</label>
-				<textarea class="form-control" id="answer_for_<?php echo $this->post_index['post_id']; ?>" style="width: 100%; max-width: 100%;" rows="10"></textarea><br />
-				<button class="btn btn-lg btn-primary" onclick="sendReply(<?php echo $this->post_index['post_id'] ?>)">send</button>
+		<h3>leave a comment</h3>
+		<label>Your comment</label>
+		<textarea class="form-control" id="answer_for_<?php echo $this->post_index['post_id']; ?>" style="width: 100%; max-width: 100%;" rows="10"></textarea><br />
+		<button class="btn btn-lg btn-primary" onclick="sendReply(<?php echo $this->post_index['post_id'] ?>)">send</button>
 <?php endif ?>
 </div>

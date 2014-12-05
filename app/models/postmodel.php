@@ -3,7 +3,12 @@
 class PostModel{
 	
 	private $db;
-	
+	public $mess;
+	/**
+	 * 
+	 * @param [type] $db   [description]
+	 * @param [type] $mess [description]
+	 */
 	function __construct($db, $mess) {
 		$this->mess = $mess;
 		try {
@@ -12,7 +17,10 @@ class PostModel{
 			exit('Database connection could not be established.');
 		}
 	}
-
+	/**
+	 * get posts where parnet id = 0 main post, subject
+	 * @return object all main posts
+	 */
 	public function getPosts(){
 			$sql = 
 				"SELECT
@@ -28,6 +36,11 @@ class PostModel{
 		$query =  $this->querySqlWithTryCatch($sql);
 		return $query->fetchAll();
 	}
+	/**
+	 * get post where post_id = $id
+	 * @param  int $id  id post
+	 * @return [array] post data
+	 */
 	public function get($id){
 		$result = array();
 		$sql = "SELECT
@@ -53,6 +66,11 @@ class PostModel{
 		}
 		return false;
 	}
+	/**
+	 * get child comments with recursion
+	 * @param  [int] $post_id [post_id where parent_id]
+	 * @return [array] [all comments child comments]
+	 */
 	public function getChild($post_id){
 		static $i = 0; $i++;
 		$result = array();
@@ -77,16 +95,22 @@ class PostModel{
 			}
 			return $result;
 	}
-
-	public function getArrayResult($query){
-		if(! $query) return false;
-		$result = array();
-		while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
-			$result[] = $row;
-		}
-		return $result;
+	/**
+	 * [delete post where post_id = $post_id]
+	 * @param  [int] $post_id [post id ]
+	 * @return [nothing]
+	 */
+	public function deletePost($post_id)
+	{
+		$sql = "DELETE FROM posts WHERE post_id = :post_id";
+		$query = $this->db->prepare($sql);
+		$query->execute(array(':post_id' => $post_id));
 	}
-
+	/**
+	 * simple db query with prepare and execute
+	 * @param  [string] $sql [query sql]
+	 * @return [object]      [db query result]
+	 */
 	public function querySqlWithTryCatch($sql){
 		try {
 			$query = $this->db->prepare($sql);
@@ -102,10 +126,10 @@ class PostModel{
 	 * @param [int] $user_id      [sended user id ]
 	 * @param [int] $parent_id    [subject id or comment id]
 	 */
-	public function addComment($post_content, $user_id, $parent_id){
+	public function addComment($post_content, $user_id, $parent_id, $post_name){
 		$current = time();
 		$sql = "INSERT INTO posts(parent_id, post_name, user_id, post_content, created_at)
-					VALUES ($parent_id, 'it\'s a comment', $user_id, '$post_content', $current)";
+					VALUES ($parent_id, '{$post_name}', {$user_id}, '{$post_content}', $current)";
 		return $this->querySqlWithTryCatch($sql);
 	}
 }

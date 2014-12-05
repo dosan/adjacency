@@ -35,13 +35,14 @@ class Post extends Controller{
 	 */
 	public function addcomment(){
 		if (Session::get('user_login_status') == 1) {
-			if ($_POST['answer'] AND $_POST['post_id']) {
-				$user = Session::get('user_id');
+			if ($_POST['answer'] AND isset($_POST['post_id'])) {
+				$user = intval(Session::get('user_id'));
 				$post_id = intval($_POST['post_id']);
 				$comment = addslashes(nl2br($_POST['answer']));
+				$post_name = isset($_POST['post_name']) ? addslashes($_POST['post_name']) : 'its just comment';
 				// load model, perform an action on the model
 				$model = $this->model('PostModel');
-				$result = $model->addComment($comment, $user, $post_id);
+				$result = $model->addComment($comment, $user, $post_id, $post_name);
 				$resData = array();
 				if ($result) {
 					$resData['success'] = 1;
@@ -60,8 +61,8 @@ class Post extends Controller{
 			// if we have an id of a new that should be deleted
 			if (isset($post_id)) {
 				// load model, perform an action on the model
-				$news_model = $this->model('NewsModel');
-				$news_model->deletePost($post_id);
+				$model = $this->model('PostModel');
+				$model->deletePost($post_id);
 			}
 		}
 		header('location: ' . URL . 'news/index');
