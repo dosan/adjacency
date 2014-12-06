@@ -29,10 +29,16 @@ class PostModel{
 					p.post_name,
 					p.post_content,
 					p.user_id,
-					p.created_at
+					p.created_at,
+					u.user_name,
+					count(p2.post_id) as comments
 				FROM
-					posts AS p
-				WHERE p.parent_id = 0";
+					`posts` AS p
+				LEFT JOIN `users` AS u ON p.user_id = u.user_id
+				LEFT JOIN `posts` AS p2 ON p.post_id = p2.parent_id
+				WHERE p.parent_id = 0
+				GROUP BY p.post_id
+				";
 		$query =  $this->querySqlWithTryCatch($sql);
 		return $query->fetchAll();
 	}
@@ -50,11 +56,15 @@ class PostModel{
 					p.post_content,
 					p.user_id,
 					p.created_at,
-					Count(p2.post_id) AS `comment`
+					u.user_name,
+					count(p2.post_id) as count_comment
 				FROM
 					`posts` AS p
+				LEFT JOIN `users` AS u ON p.user_id = u.user_id
 				LEFT JOIN `posts` AS p2 ON p.post_id = p2.parent_id
-				WHERE p.parent_id = 0 AND p.post_id = $id";
+				WHERE p.post_id = {$id} AND p.parent_id = 0
+				GROUP BY p.post_id
+				";
 		$query =  $this->querySqlWithTryCatch($sql);
 		$row = $query->fetch(PDO::FETCH_ASSOC);
 		if ($row['post_id']) {
@@ -85,7 +95,7 @@ class PostModel{
 				u.user_name
 			FROM `posts` AS p
 			LEFT JOIN `users` AS u ON p.user_id = u.user_id
-			WHERE parent_id = '{$post_id}'");
+			WHERE parent_id = '{$post_id}' ORDER BY p.post_id DESC");
 			while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
 				$comments = $this->getChild($row['post_id']);
 				if ($comments) {

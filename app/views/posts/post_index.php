@@ -5,7 +5,7 @@
 	<div class="content_subject">
 		<?php echo $this->post_index['post_content'];?>
 		<div class="subject_footer">
-			Answers (<?= $this->post_index['comment'] or '0'; ?>)
+			Answers (<?php echo $this->post_index['count_comment']; ?>)
 			<span class="date">
 				<?php if (isset($this->post_index['created_at'])) echo date('Y-m-d, H:m:s',$this->post_index['news_time']); ?>
 			</span>

@@ -7,9 +7,12 @@
 			</p>
 			<p>
 				<a href="<?php echo URL ?>post/<?= $post->post_id;?>" class="btn btn-info" role="button">Read more</a>
-				Comments(<?php echo $post->comment; ?>)
+				Comments(<?php echo $post->comments; ?>)
 			<span class="date">
 				<?php if (isset($post->created_at)) echo date('Y-m-d, H:m:s',$post->created_at); ?>
+			</span>
+			<span class="author">
+				Author: <?php echo $post->user_name ?>
 			</span>
 			</p>
 	<?php }//end foreach post?>
