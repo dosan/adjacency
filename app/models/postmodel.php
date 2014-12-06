@@ -39,7 +39,7 @@ class PostModel{
 				WHERE p.parent_id = 0
 				GROUP BY p.post_id
 				";
-		$query =  $this->querySqlWithTryCatch($sql);
+		$query =  $this->db->query($sql);
 		return $query->fetchAll();
 	}
 	/**
@@ -65,7 +65,7 @@ class PostModel{
 				WHERE p.post_id = {$id} AND p.parent_id = 0
 				GROUP BY p.post_id
 				";
-		$query =  $this->querySqlWithTryCatch($sql);
+		$query =  $this->db->query($sql);
 		$row = $query->fetch(PDO::FETCH_ASSOC);
 		if ($row['post_id']) {
 			$comments = $this->getChild($row['post_id']);
@@ -84,7 +84,7 @@ class PostModel{
 	public function getChild($post_id){
 		static $i = 0; $i++;
 		$result = array();
-		$query = $this->querySqlWithTryCatch(
+		$query = $this->db->query(
 			"SELECT
 				p.post_id,
 				p.parent_id,
@@ -117,20 +117,6 @@ class PostModel{
 		$query->execute(array(':post_id' => $post_id));
 	}
 	/**
-	 * simple db query with prepare and execute
-	 * @param  [string] $sql [query sql]
-	 * @return [object]      [db query result]
-	 */
-	public function querySqlWithTryCatch($sql){
-		try {
-			$query = $this->db->prepare($sql);
-			$query->execute();
-		} catch (PDOException $e) {
-			exit(CONNECTION_FAILED);
-		}
-		return $query;
-	}
-	/**
 	 * [add comment function]
 	 * @param [string] $post_content [comment content ]
 	 * @param [int] $user_id      [sended user id ]
@@ -140,6 +126,6 @@ class PostModel{
 		$current = time();
 		$sql = "INSERT INTO posts(parent_id, post_name, user_id, post_content, created_at)
 					VALUES ($parent_id, '{$post_name}', {$user_id}, '{$post_content}', $current)";
-		return $this->querySqlWithTryCatch($sql);
+		return $this->db->query($sql);
 	}
 }

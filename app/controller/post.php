@@ -1,8 +1,20 @@
 <?php
 class Post extends Controller{
+	/**
+	 * posts list data
+	 * @var [array]
+	 */
 	public $posts;
+	/**
+	 * post data
+	 * @var [array]
+	 */
 	public $post_index;
 
+	/**
+	 * index action main post page
+	 * @return [view] [list of posts]
+	 */
 	public function index(){
 		$posts = $this->model('PostModel');
 		$this->posts = $posts->getPosts();
@@ -10,6 +22,11 @@ class Post extends Controller{
 		require VIEWS_PATH.'posts/index.php';
 		require VIEWS_PATH.'layouts/footer.php';
 	}
+	/**
+	 * get page post id something like that http://localhost/post/22
+	 * @param  [int] $id [id post]
+	 * @return [view]     [view page post/$id]
+	 */
 	public function getId($id){
 		$posts = $this->model('PostModel');
 		$this->post_index = $posts->get($id);
@@ -19,19 +36,9 @@ class Post extends Controller{
 		require VIEWS_PATH.'layouts/footer.php';
 		}
 	}
-	public function addPost(){
-		if (Session::get('user_login_status') == 1) {
-			// if we have POST data to create a new song entry
-			if (isset($_POST["submit_add_news"])) {
-				// load model, perform an action on the model
-				$news_model = $this->model('NewsModel');
-				$news_model->addPost( strip_tags(trim($_POST["news_name"])), $_POST["news_description"], Session::get("user_id"));
-			}
-			header('location: ' . URL . 'news/index');
-		}
-	}
 	/**
 	 * function for leave comments or answers
+	 * @return  array json data result
 	 */
 	public function addcomment(){
 		if (Session::get('user_login_status') == 1) {
@@ -54,6 +61,11 @@ class Post extends Controller{
 			}
 		}
 	}
+	/**
+	 * delete post
+	 * @param  [int] $post_id [post id ]
+	 * @return [nothing]
+	 */
 	public function deletePost($post_id)
 	{
 		//only admin have access to the function deletePost
@@ -67,6 +79,11 @@ class Post extends Controller{
 		}
 		header('location: ' . URL . 'news/index');
 	}
+	/**
+	 * print comments(I know is wrong way to store view in controller)
+	 * @param  [array] $postData [data of comments to print]
+	 * @return [view]
+	 */
 	public function showComments($postData){
 		foreach ($postData as $key => $value) {
 			echo '<div class="comments">';

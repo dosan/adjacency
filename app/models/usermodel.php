@@ -25,13 +25,11 @@ class UserModel{
 		$user_name = htmlspecialchars($user_name);
 			$sql = "SELECT * FROM `users`
 					WHERE user_name = '" . $user_name . "' OR user_email = '" . $user_name . "';";
-
-			$res_of_log_check = $this->querySqlWithTryCatch($sql);
+			$res_of_log_check = $this->db->query($sql);
 			// if this user exists
 			if ($res_of_log_check->rowCount() == 1) {
 				// get result row (as an object)
 				$res = $res_of_log_check->fetch(PDO::FETCH_OBJ);
-				
 				if (password_verify($user_password, $res->user_password_hash)) {
 					// login user
 					Session::set('user_id', $res->user_id);
@@ -98,7 +96,7 @@ class UserModel{
 				
 				// check if user or email address already exists
 				$sql = "SELECT * FROM users WHERE user_name = '" . $user_name . "' OR user_email = '" . $user_email . "';";
-				$query_check_user_name = $this->querySqlWithTryCatch($sql);
+				$query_check_user_name = $this->db->query($sql);
 
 				if ($query_check_user_name->rowCount() == 1) {
 
@@ -109,7 +107,7 @@ class UserModel{
 							VALUES('" . $user_name . "', '" . $user_password_hash . "',";
 						$sql .= " '" . $user_email . "',".time().");";
 					
-					$query_new_user_insert =  $this->querySqlWithTryCatch($sql);
+					$query_new_user_insert =  $this->db->query($sql);
 
 					// if user has been added successfully
 					if ($query_new_user_insert) {
@@ -160,7 +158,7 @@ class UserModel{
 					WHERE 
 						`user_email` = '{$user_email}' AND `user_password_hash` = '".Session::get('user_password')."';";
 			
-			$res = $this->querySqlWithTryCatch($sql);
+			$res = $this->db->query($sql);
 		}else{
 			$this->errors['message'] = 'Текущий пароль не верный';
 		}
@@ -177,38 +175,24 @@ class UserModel{
 		}
 	}
 	/**
-	 * simple query 
-	 * @param  [string] $sql [sql query]
-	 * @return [object]      [result query]
-	 */
-	public function querySqlWithTryCatch($sql){
-		try {
-			$query = $this->db->prepare($sql);
-			$query->execute();
-		} catch (PDOException $e) {
-			exit(CONNECTION_FAILED);
-		}
-		return $query;
-	}
-	/**
 	 * change user's language
-	 * @param  [lang_name] $user_lang [choose languange]
-	 * @return [string query]            [description]
+	 * @param  [stirng] $user_lang [choose languange]
+	 * @return [string]            [query result]
 	 */
 	public function changeLang($user_lang){
 		$sql = "UPDATE users SET `user_lang` = '{$user_lang}' WHERE `user_id` = '{Session::get('user_id')}'";
 		//set in session users's lang 
 		Session::set('user_lang', $user_lang);
-		return $this->querySqlWithTryCatch($sql);
+		return $this->db->query($sql);
 	}
 	/**
 	 * user's avatar setter
-	 * @param  [type] $user_id     [user's id]
-	 * @param  [type] $newFileName [file name]
-	 * @return [type]              [description]
+	 * @param  [int] $user_id     [user's id]
+	 * @param  [string] $newFileName [file name]
+	 * @return [object] $query   [query result]
 	 */
 	public function uploadImage($user_id, $newFileName){
 		$sql = "UPDATE `users` SET `user_img` = '{$newFileName}' WHERE `user_id` = '{$user_id}'";
-		return $this->querySqlWithTryCatch($sql);
+		return $this->db->query($sql);
 	}
 }
