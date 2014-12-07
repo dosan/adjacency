@@ -25,5 +25,7 @@
 			<label>Post content</label>
 			<textarea class="form-control" id="answer_for_0" style="width: 100%; max-width: 100%;" rows="10"></textarea><br />
 			<button class="btn btn-lg btn-primary" onclick="sendReply(0)">send</button>
+	<?php else: ?>
+	[ <a href="<?php echo URL?>user/register">Регистрация</a> | <a href="<?php echo URL ?>user">Вход</a> ]
 	<?php endif ?>
 </div>

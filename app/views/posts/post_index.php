@@ -27,5 +27,8 @@
 		<label>Your comment</label>
 		<textarea class="form-control" id="answer_for_<?php echo $this->post_index['post_id']; ?>" style="width: 100%; max-width: 100%;" rows="10"></textarea><br />
 		<button class="btn btn-lg btn-primary" onclick="sendReply(<?php echo $this->post_index['post_id'] ?>)">send</button>
+<?php else: ?>
+	Добавлять комментарии могут только зарегистрированные пользователи.
+	[ <a href="<?php echo URL?>user/register">Регистрация</a> | <a href="<?php echo URL ?>user">Вход</a> ]
 <?php endif ?>
 </div>
