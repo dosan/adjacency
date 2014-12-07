@@ -86,10 +86,12 @@ class Post extends Controller{
 	 */
 	public function showComments($postData){
 		foreach ($postData as $key => $value) {
+			//constraint for protect from infinity cycle
+			static $i; $i++;
 			echo '<div class="comments">';
 			echo '<div class="comment_hedaer">';
 			echo $value['user_name'].' at '.date('Y-m-d, H:m', $value['created_at']);
-			if (Session::get('user_login_status') == 1) {
+			if (Session::get('user_login_status') == 1 AND $i < 10) {
 				echo ' <a href="#" onclick="showFormAnswer('.$value['post_id'].'); return false;">Reply</a>';
 			}
 			echo '<br></div>';

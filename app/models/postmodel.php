@@ -82,6 +82,7 @@ class PostModel{
 	 * @return [array] [all comments child comments]
 	 */
 	public function getChild($post_id){
+		//constraint for protect from infinity cycle
 		static $i = 0; $i++;
 		if ($i > 10) {
 			return false;
