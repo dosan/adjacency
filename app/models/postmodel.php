@@ -83,6 +83,9 @@ class PostModel{
 	 */
 	public function getChild($post_id){
 		static $i = 0; $i++;
+		if ($i > 10) {
+			return false;
+		}
 		$result = array();
 		$query = $this->db->query(
 			"SELECT
