@@ -7,7 +7,7 @@
 		<div class="subject_footer">
 			Answers (<?php echo $this->post_index['count_comment']; ?>)
 			<span class="date">
-				<?php if (isset($this->post_index['created_at'])) echo date('Y-m-d, H:m:s',$this->post_index['news_time']); ?>
+				<?php if (isset($this->post_index['created_at'])) echo date('Y-m-d, H:m:s',$this->post_index['created_at']); ?>
 			</span>
 			<span class="author">
 				Author: <?php echo $this->post_index['user_name'] ?>
